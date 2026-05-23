@@ -43,6 +43,11 @@ function sanitize_trim(?string $v): string
     return trim((string)$v);
 }
 
+function status_label(int $status): string
+{
+    return $status === 1 ? 'Ativo' : 'Inativo';
+}
+
 function tool_current_stock(int $toolId): int
 {
     $pdo = db();

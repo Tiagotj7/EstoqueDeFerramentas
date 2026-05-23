@@ -12,7 +12,7 @@ if ($id <= 0) {
     redirect('tool_list.php');
 }
 
-$stmt = $pdo->prepare("SELECT id, name, category, unit, min_stock FROM tools WHERE id = :id");
+$stmt = $pdo->prepare("SELECT id, name, category, unit, min_stock, status FROM tools WHERE id = :id");
 $stmt->execute([':id' => $id]);
 $tool = $stmt->fetch();
 
@@ -26,22 +26,25 @@ $name = $tool['name'];
 $category = $tool['category'];
 $unit = $tool['unit'];
 $min_stock = (string)$tool['min_stock'];
+$status = (string)$tool['status'];
 
 if (is_post()) {
     $name = sanitize_trim($_POST['name'] ?? '');
     $category = sanitize_trim($_POST['category'] ?? '');
     $unit = sanitize_trim($_POST['unit'] ?? '');
     $min_stock = sanitize_trim($_POST['min_stock'] ?? '');
+    $status = sanitize_trim($_POST['status'] ?? $status);
 
     if ($name === '') $errors[] = 'Nome da ferramenta é obrigatório';
     if ($category === '') $errors[] = 'Categoria é obrigatória';
     if ($unit === '') $errors[] = 'Unidade é obrigatória';
     if ($min_stock === '' || !ctype_digit($min_stock) || (int)$min_stock < 0) $errors[] = 'Estoque mínimo deve ser um inteiro >= 0';
+    if (!in_array($status, ['0', '1'], true)) $errors[] = 'Status inválido';
 
     if (!$errors) {
         $stmt = $pdo->prepare("
             UPDATE tools
-            SET name = :name, category = :category, unit = :unit, min_stock = :min_stock
+            SET name = :name, category = :category, unit = :unit, min_stock = :min_stock, status = :status
             WHERE id = :id
         ");
         $stmt->execute([
@@ -49,6 +52,7 @@ if (is_post()) {
             ':category' => $category,
             ':unit' => $unit,
             ':min_stock' => (int)$min_stock,
+            ':status' => (int)$status,
             ':id' => $id
         ]);
 
@@ -70,6 +74,15 @@ echo '<div><label for="name">Nome</label><input id="name" name="name" required t
 echo '<div><label for="category">Categoria</label><input id="category" name="category" required type="text" value="' . e($category) . '"></div>';
 echo '<div><label for="unit">Unidade</label><input id="unit" name="unit" required type="text" value="' . e($unit) . '"></div>';
 echo '<div><label for="min_stock">Estoque mínimo</label><input id="min_stock" name="min_stock" required type="number" min="0" step="1" value="' . e($min_stock) . '"></div>';
+
+echo '<div>';
+echo '<label for="status">Status</label>';
+echo '<select id="status" name="status" required>';
+echo '<option value="1"' . ($status === '1' ? ' selected' : '') . '>Ativo</option>';
+echo '<option value="0"' . ($status === '0' ? ' selected' : '') . '>Inativo</option>';
+echo '</select>';
+echo '</div>';
+
 echo '</div>';
 echo '<div class="actions">';
 echo '<button type="submit">Atualizar</button>';

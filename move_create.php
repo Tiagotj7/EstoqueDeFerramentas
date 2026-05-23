@@ -12,7 +12,7 @@ $move_type = 'IN';
 $quantity = '';
 $note = '';
 
-$toolsStmt = $pdo->query("SELECT id, name FROM tools ORDER BY name ASC");
+$toolsStmt = $pdo->query("SELECT id, name FROM tools WHERE status = 1 ORDER BY name ASC");
 $tools = $toolsStmt->fetchAll();
 
 if (is_post()) {
@@ -34,10 +34,14 @@ if (is_post()) {
     }
 
     if (!$errors) {
-        $stmt = $pdo->prepare("SELECT id FROM tools WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT id, status FROM tools WHERE id = :id");
         $stmt->execute([':id' => (int)$tool_id]);
-        if (!$stmt->fetch()) {
+        $toolRow = $stmt->fetch();
+
+        if (!$toolRow) {
             $errors[] = 'Ferramenta não encontrada';
+        } elseif ((int)$toolRow['status'] !== 1) {
+            $errors[] = 'Não é possível movimentar uma ferramenta inativa';
         }
     }
 

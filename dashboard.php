@@ -13,12 +13,13 @@ $stmt = $pdo->query("
         t.category,
         t.unit,
         t.min_stock,
+        t.status,
         COALESCE(SUM(CASE WHEN sm.move_type = 'IN' THEN sm.quantity ELSE 0 END), 0) -
         COALESCE(SUM(CASE WHEN sm.move_type = 'OUT' THEN sm.quantity ELSE 0 END), 0) AS current_stock
     FROM tools t
     LEFT JOIN stock_moves sm ON sm.tool_id = t.id
-    GROUP BY t.id, t.name, t.category, t.unit, t.min_stock
-    ORDER BY t.name ASC
+    GROUP BY t.id, t.name, t.category, t.unit, t.min_stock, t.status
+    ORDER BY t.status DESC, t.name ASC
 ");
 $tools = $stmt->fetchAll();
 
@@ -33,13 +34,14 @@ if (!$tools) {
 } else {
     echo '<table class="table">';
     echo '<thead><tr>';
-    echo '<th>Ferramenta</th><th>Categoria</th><th>Unidade</th><th>Estoque mínimo</th><th>Estoque atual</th><th>Indicador</th><th>Ações</th>';
+    echo '<th>Ferramenta</th><th>Categoria</th><th>Unidade</th><th>Estoque mínimo</th><th>Estoque atual</th><th>Status</th><th>Indicador</th><th>Ações</th>';
     echo '</tr></thead><tbody>';
 
     foreach ($tools as $t) {
         $current = (int)$t['current_stock'];
         $min = (int)$t['min_stock'];
         $low = $current < $min;
+        $st = (int)$t['status'];
 
         echo '<tr>';
         echo '<td>' . e($t['name']) . '</td>';
@@ -47,7 +49,8 @@ if (!$tools) {
         echo '<td>' . e($t['unit']) . '</td>';
         echo '<td>' . e((string)$min) . '</td>';
         echo '<td>' . e((string)$current) . '</td>';
-        echo '<td>' . ($low ? '<span class="badge low">BAIXO</span>' : '-') . '</td>';
+        echo '<td>' . e(status_label($st)) . '</td>';
+        echo '<td>' . ($st === 1 && $low ? '<span class="badge low">BAIXO</span>' : '-') . '</td>';
         echo '<td class="inline-links">';
         echo '<a href="tool_edit.php?id=' . (int)$t['id'] . '">Editar</a>';
         echo '<a href="tool_delete.php?id=' . (int)$t['id'] . '" data-confirm="Excluir esta ferramenta?">Excluir</a>';

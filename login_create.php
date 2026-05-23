@@ -22,12 +22,19 @@ if (is_post()) {
     }
 
     if (!$errors) {
-        $stmt = $pdo->prepare("SELECT id, name, email, password_hash FROM users WHERE email = :email LIMIT 1");
+        $stmt = $pdo->prepare("
+            SELECT id, name, email, password_hash, status
+            FROM users
+            WHERE email = :email
+            LIMIT 1
+        ");
         $stmt->execute([':email' => $email]);
         $user = $stmt->fetch();
 
         if (!$user || !password_verify($password, $user['password_hash'])) {
             $errors[] = 'invalid credentials';
+        } elseif ((int)$user['status'] !== 1) {
+            $errors[] = 'Usuário inativo';
         } else {
             login_user($user);
             redirect('dashboard.php');

@@ -17,7 +17,9 @@ $stmt->execute([':id' => $id]);
 $cnt = (int)($stmt->fetch()['cnt'] ?? 0);
 
 if ($cnt > 0) {
-    set_flash('error', 'Não é possível excluir uma ferramenta com movimentações registradas');
+    $stmt = $pdo->prepare("UPDATE tools SET status = 0 WHERE id = :id");
+    $stmt->execute([':id' => $id]);
+    set_flash('success', 'Ferramenta inativada com sucesso (possui movimentações)');
     redirect('tool_list.php');
 }
 

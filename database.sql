@@ -43,3 +43,9 @@ CREATE TABLE stock_moves (
 CREATE INDEX idx_stock_moves_tool_id ON stock_moves(tool_id);
 CREATE INDEX idx_stock_moves_user_id ON stock_moves(user_id);
 CREATE INDEX idx_stock_moves_moved_at ON stock_moves(moved_at);
+
+ALTER TABLE users ADD COLUMN status TINYINT(1) NOT NULL DEFAULT 1;
+ALTER TABLE tools ADD COLUMN status TINYINT(1) NOT NULL DEFAULT 1;
+
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_tools_status ON tools(status);

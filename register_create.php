@@ -39,8 +39,8 @@ if (is_post()) {
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
             $stmt = $pdo->prepare("
-                INSERT INTO users (name, email, password_hash, created_at)
-                VALUES (:name, :email, :password_hash, NOW())
+                INSERT INTO users (name, email, password_hash, status, created_at)
+                VALUES (:name, :email, :password_hash, 1, NOW())
             ");
             $stmt->execute([
                 ':name' => $name,
