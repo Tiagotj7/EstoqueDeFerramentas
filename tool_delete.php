@@ -8,7 +8,7 @@ $pdo = db();
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-    set_flash('error', 'Invalid tool');
+    set_flash('error', 'Ferramenta inválida');
     redirect('tool_list.php');
 }
 
@@ -17,12 +17,12 @@ $stmt->execute([':id' => $id]);
 $cnt = (int)($stmt->fetch()['cnt'] ?? 0);
 
 if ($cnt > 0) {
-    set_flash('error', 'Cannot delete tool with stock moves');
+    set_flash('error', 'Não é possível excluir uma ferramenta com movimentações registradas');
     redirect('tool_list.php');
 }
 
 $stmt = $pdo->prepare("DELETE FROM tools WHERE id = :id");
 $stmt->execute([':id' => $id]);
 
-set_flash('success', 'tool deleted successfully');
+set_flash('success', 'ferramenta excluída com sucesso');
 redirect('tool_list.php');

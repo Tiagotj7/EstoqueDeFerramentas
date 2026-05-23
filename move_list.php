@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/config/shared/shared.php';
 
-render_header('Stock Move History', true);
+render_header('Histórico de Movimentações', true);
 
 $pdo = db();
 
@@ -24,14 +24,14 @@ $moves = $stmt->fetchAll();
 
 echo '<div class="card">';
 echo '<div class="actions">';
-echo '<a class="btn" href="move_create.php">New Move</a>';
+echo '<a class="btn" href="move_create.php">Nova Movimentação</a>';
 echo '</div>';
 
 if (!$moves) {
-    echo '<p class="muted">No stock moves found.</p>';
+    echo '<p class="muted">Nenhuma movimentação encontrada.</p>';
 } else {
     echo '<table class="table">';
-    echo '<thead><tr><th>Date</th><th>Tool</th><th>User</th><th>Type</th><th>Quantity</th><th>Note</th></tr></thead><tbody>';
+    echo '<thead><tr><th>Data</th><th>Ferramenta</th><th>Usuário</th><th>Tipo</th><th>Quantidade</th><th>Observação</th></tr></thead><tbody>';
     foreach ($moves as $m) {
         echo '<tr>';
         echo '<td>' . e($m['moved_at']) . '</td>';

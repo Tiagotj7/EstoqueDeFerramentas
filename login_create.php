@@ -15,10 +15,10 @@ if (is_post()) {
     $password = (string)($_POST['password'] ?? '');
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Valid email is required';
+        $errors[] = 'Email válido é obrigatório';
     }
     if ($password === '') {
-        $errors[] = 'Password is required';
+        $errors[] = 'Senha é obrigatória';
     }
 
     if (!$errors) {
@@ -51,13 +51,13 @@ echo '<label for="email">Email</label>';
 echo '<input id="email" name="email" type="email" required value="' . e($email) . '">';
 echo '</div>';
 echo '<div>';
-echo '<label for="password">Password</label>';
+echo '<label for="password">Senha</label>';
 echo '<input id="password" name="password" type="password" required value="">';
 echo '</div>';
 echo '</div>';
 echo '<div class="actions">';
-echo '<button type="submit">Login</button>';
-echo '<a class="btn secondary" href="register_create.php">Register</a>';
+echo '<button type="submit">Entrar</button>';
+echo '<a class="btn secondary" href="register_create.php">Cadastrar</a>';
 echo '</div>';
 echo '</form>';
 echo '</div>';

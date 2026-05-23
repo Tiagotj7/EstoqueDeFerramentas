@@ -68,7 +68,7 @@ function render_header(string $title, bool $requireAuth = true): void
     $userName = is_logged_in() ? ($_SESSION['user']['name'] ?? '') : '';
 
     echo '<!doctype html>';
-    echo '<html lang="en">';
+    echo '<html lang="pt-br">';
     echo '<head>';
     echo '<meta charset="utf-8">';
     echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
@@ -82,14 +82,14 @@ function render_header(string $title, bool $requireAuth = true): void
     echo '<div class="brand"><a href="dashboard.php">' . e(APP_NAME) . '</a></div>';
     echo '<nav class="nav">';
     if (is_logged_in()) {
-        echo '<a href="dashboard.php">Dashboard</a>';
-        echo '<a href="tool_list.php">Tools</a>';
-        echo '<a href="move_list.php">Stock Moves</a>';
-        echo '<a href="move_create.php">New Move</a>';
-        echo '<a href="logout_delete.php">Logout</a>';
+        echo '<a href="dashboard.php">Painel</a>';
+        echo '<a href="tool_list.php">Ferramentas</a>';
+        echo '<a href="move_list.php">Movimentações</a>';
+        echo '<a href="move_create.php">Nova Movimentação</a>';
+        echo '<a href="logout_delete.php">Sair</a>';
     } else {
-        echo '<a href="login_create.php">Login</a>';
-        echo '<a href="register_create.php">Register</a>';
+        echo '<a href="login_create.php">Entrar</a>';
+        echo '<a href="register_create.php">Cadastrar</a>';
     }
     echo '</nav>';
     echo '</div>';
@@ -99,7 +99,7 @@ function render_header(string $title, bool $requireAuth = true): void
     echo '<div class="page-head">';
     echo '<h1>' . e($title) . '</h1>';
     if (is_logged_in()) {
-        echo '<div class="muted">Logged in as: ' . e($userName) . '</div>';
+        echo '<div class="muted">Logado como: ' . e($userName) . '</div>';
     }
     echo '</div>';
 

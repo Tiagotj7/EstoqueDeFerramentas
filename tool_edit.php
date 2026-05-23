@@ -2,13 +2,13 @@
 
 require_once __DIR__ . '/config/shared/shared.php';
 
-render_header('Edit Tool', true);
+render_header('Editar Ferramenta', true);
 
 $pdo = db();
 
 $id = (int)($_GET['id'] ?? 0);
 if ($id <= 0) {
-    set_flash('error', 'Invalid tool');
+    set_flash('error', 'Ferramenta inválida');
     redirect('tool_list.php');
 }
 
@@ -17,7 +17,7 @@ $stmt->execute([':id' => $id]);
 $tool = $stmt->fetch();
 
 if (!$tool) {
-    set_flash('error', 'Tool not found');
+    set_flash('error', 'Ferramenta não encontrada');
     redirect('tool_list.php');
 }
 
@@ -33,10 +33,10 @@ if (is_post()) {
     $unit = sanitize_trim($_POST['unit'] ?? '');
     $min_stock = sanitize_trim($_POST['min_stock'] ?? '');
 
-    if ($name === '') $errors[] = 'Tool name is required';
-    if ($category === '') $errors[] = 'Category is required';
-    if ($unit === '') $errors[] = 'Unit is required';
-    if ($min_stock === '' || !ctype_digit($min_stock) || (int)$min_stock < 0) $errors[] = 'Min stock must be an integer >= 0';
+    if ($name === '') $errors[] = 'Nome da ferramenta é obrigatório';
+    if ($category === '') $errors[] = 'Categoria é obrigatória';
+    if ($unit === '') $errors[] = 'Unidade é obrigatória';
+    if ($min_stock === '' || !ctype_digit($min_stock) || (int)$min_stock < 0) $errors[] = 'Estoque mínimo deve ser um inteiro >= 0';
 
     if (!$errors) {
         $stmt = $pdo->prepare("
@@ -52,7 +52,7 @@ if (is_post()) {
             ':id' => $id
         ]);
 
-        set_flash('success', 'tool updated successfully');
+        set_flash('success', 'ferramenta atualizada com sucesso');
         redirect('tool_list.php');
     }
 }
@@ -66,14 +66,14 @@ if ($errors) {
 
 echo '<form method="post" action="tool_edit.php?id=' . (int)$id . '" novalidate>';
 echo '<div class="grid">';
-echo '<div><label for="name">Tool name</label><input id="name" name="name" required type="text" value="' . e($name) . '"></div>';
-echo '<div><label for="category">Category</label><input id="category" name="category" required type="text" value="' . e($category) . '"></div>';
-echo '<div><label for="unit">Unit</label><input id="unit" name="unit" required type="text" value="' . e($unit) . '"></div>';
-echo '<div><label for="min_stock">Min stock</label><input id="min_stock" name="min_stock" required type="number" min="0" step="1" value="' . e($min_stock) . '"></div>';
+echo '<div><label for="name">Nome</label><input id="name" name="name" required type="text" value="' . e($name) . '"></div>';
+echo '<div><label for="category">Categoria</label><input id="category" name="category" required type="text" value="' . e($category) . '"></div>';
+echo '<div><label for="unit">Unidade</label><input id="unit" name="unit" required type="text" value="' . e($unit) . '"></div>';
+echo '<div><label for="min_stock">Estoque mínimo</label><input id="min_stock" name="min_stock" required type="number" min="0" step="1" value="' . e($min_stock) . '"></div>';
 echo '</div>';
 echo '<div class="actions">';
-echo '<button type="submit">Update</button>';
-echo '<a class="btn secondary" href="tool_list.php">Back</a>';
+echo '<button type="submit">Atualizar</button>';
+echo '<a class="btn secondary" href="tool_list.php">Voltar</a>';
 echo '</div>';
 echo '</form>';
 echo '</div>';

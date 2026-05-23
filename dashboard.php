@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/config/shared/shared.php';
 
-render_header('Dashboard', true);
+render_header('Painel (Estoque)', true);
 
 $pdo = db();
 
@@ -24,16 +24,16 @@ $tools = $stmt->fetchAll();
 
 echo '<div class="card">';
 echo '<div class="inline-links">';
-echo '<a class="btn" href="tool_create.php">New Tool</a> ';
-echo '<a class="btn" href="move_create.php">New Stock Move</a>';
+echo '<a class="btn" href="tool_create.php">Nova Ferramenta</a> ';
+echo '<a class="btn" href="move_create.php">Nova Movimentação</a>';
 echo '</div>';
 
 if (!$tools) {
-    echo '<p class="muted">No tools registered.</p>';
+    echo '<p class="muted">Nenhuma ferramenta cadastrada.</p>';
 } else {
     echo '<table class="table">';
     echo '<thead><tr>';
-    echo '<th>Tool name</th><th>Category</th><th>Unit</th><th>Min stock</th><th>Current stock</th><th>Indicator</th><th>Actions</th>';
+    echo '<th>Ferramenta</th><th>Categoria</th><th>Unidade</th><th>Estoque mínimo</th><th>Estoque atual</th><th>Indicador</th><th>Ações</th>';
     echo '</tr></thead><tbody>';
 
     foreach ($tools as $t) {
@@ -47,10 +47,10 @@ if (!$tools) {
         echo '<td>' . e($t['unit']) . '</td>';
         echo '<td>' . e((string)$min) . '</td>';
         echo '<td>' . e((string)$current) . '</td>';
-        echo '<td>' . ($low ? '<span class="badge low">LOW</span>' : '-') . '</td>';
+        echo '<td>' . ($low ? '<span class="badge low">BAIXO</span>' : '-') . '</td>';
         echo '<td class="inline-links">';
-        echo '<a href="tool_edit.php?id=' . (int)$t['id'] . '">Edit</a>';
-        echo '<a href="tool_delete.php?id=' . (int)$t['id'] . '" data-confirm="Delete this tool?">Delete</a>';
+        echo '<a href="tool_edit.php?id=' . (int)$t['id'] . '">Editar</a>';
+        echo '<a href="tool_delete.php?id=' . (int)$t['id'] . '" data-confirm="Excluir esta ferramenta?">Excluir</a>';
         echo '</td>';
         echo '</tr>';
     }

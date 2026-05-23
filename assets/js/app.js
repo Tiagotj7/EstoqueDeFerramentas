@@ -1,7 +1,7 @@
 document.addEventListener('click', function (e) {
   const el = e.target;
   if (el && el.matches('[data-confirm]')) {
-    const msg = el.getAttribute('data-confirm') || 'Are you sure?';
+    const msg = el.getAttribute('data-confirm') || 'Tem certeza?';
     if (!confirm(msg)) {
       e.preventDefault();
     }

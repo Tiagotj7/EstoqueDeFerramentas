@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/config/shared/shared.php';
 
-render_header('Register', false);
+render_header('Cadastro de Usuário', false);
 
 $pdo = db();
 
@@ -17,15 +17,15 @@ if (is_post()) {
     $password = (string)($_POST['password'] ?? '');
 
     if ($name === '') {
-        $errors[] = 'Name is required';
+        $errors[] = 'Nome é obrigatório';
     }
 
     if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = 'Valid email is required';
+        $errors[] = 'Email válido é obrigatório';
     }
 
     if ($password === '' || strlen($password) < 6) {
-        $errors[] = 'Password is required (min 6 chars)';
+        $errors[] = 'Senha é obrigatória (mínimo 6 caracteres)';
     }
 
     if (!$errors) {
@@ -34,7 +34,7 @@ if (is_post()) {
         $exists = $stmt->fetch();
 
         if ($exists) {
-            $errors[] = 'Email already in use';
+            $errors[] = 'Este email já está em uso';
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -66,7 +66,7 @@ if ($errors) {
 echo '<form method="post" action="register_create.php" novalidate>';
 echo '<div class="grid">';
 echo '<div>';
-echo '<label for="name">Name</label>';
+echo '<label for="name">Nome</label>';
 echo '<input id="name" name="name" type="text" required value="' . e($name) . '">';
 echo '</div>';
 echo '<div>';
@@ -74,13 +74,13 @@ echo '<label for="email">Email</label>';
 echo '<input id="email" name="email" type="email" required value="' . e($email) . '">';
 echo '</div>';
 echo '<div>';
-echo '<label for="password">Password</label>';
+echo '<label for="password">Senha</label>';
 echo '<input id="password" name="password" type="password" required minlength="6" value="">';
 echo '</div>';
 echo '</div>';
 echo '<div class="actions">';
-echo '<button type="submit">Create account</button>';
-echo '<a class="btn secondary" href="login_create.php">Back to login</a>';
+echo '<button type="submit">Cadastrar</button>';
+echo '<a class="btn secondary" href="login_create.php">Voltar para o login</a>';
 echo '</div>';
 echo '</form>';
 echo '</div>';
